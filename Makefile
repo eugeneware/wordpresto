@@ -78,3 +78,8 @@ plugininit: ~/.composer/bin/wp wordpressinit
 	@ln -sf `pwd` wordpress/wp-content/plugins/
 	@~/.composer/bin/wp --path=./wordpress plugin activate "$(BASE)"
 	@~/.composer/bin/wp --path=./wordpress plugin list
+
+.PHONY: build
+build:
+	@rm -rf "./build/$(BASE).zip"
+	@zip -y9r "./build/$(BASE).zip" . -x "wordpress/*" ".git/*" "db/*" ".git*" "Makefile" "bin/*" "build/*" "*.swp"
