@@ -44,6 +44,7 @@ wordpressinit: clean mysqlinit mysqlup
 	@mysqld --datadir=$(MYSQL_DATA) --user=mysql --port=$(MYSQL_PORT) --socket=$(MYSQL_SOCKET) < /dev/null > /dev/null 2> /dev/null&
 	@echo "Linking Apache Dir..."
 	ln -sf $(WORDPRESS_DIR) $(APACHE_PATH)
+	sleep 3
 
 # reset wordpress database
 wordpressreset: mysqldown
