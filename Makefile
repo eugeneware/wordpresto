@@ -74,7 +74,7 @@ mysqldown:
 ~/.composer/bin/wp:
 	@curl -s http://wp-cli.org/installer.sh | bash
 
-plugininit: ~/.composer/bin/wp
+plugininit: ~/.composer/bin/wp wordpressinit
 	@ln -sf `pwd` wordpress/wp-content/plugins/
 	@~/.composer/bin/wp --path=./wordpress plugin activate "$(BASE)"
 	@~/.composer/bin/wp --path=./wordpress plugin list
