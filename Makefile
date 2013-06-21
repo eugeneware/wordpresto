@@ -1,4 +1,3 @@
-# Work out where mysql is
 MYSQL_DIR = $(shell echo `which mysqld`)
 MYSQL_BIN_BASE = $(shell echo `dirname $(MYSQL_DIR)`)
 MYSQL_BASE = $(shell echo `dirname $(MYSQL_BIN_BASE)`)
@@ -8,9 +7,12 @@ MYSQL_SOCKET = /tmp/mysql.wordpress.sock
 MYSQL_SNAPSHOT = ./db/mysql.snapshot
 CURRENT_DIR = $(shell echo `pwd`)
 BASE = $(shell echo `basename $(CURRENT_DIR)`)
+WORDPRESS_DIR = $(shell echo `pwd`/wordpress)
+
+# You may with to customize these two variables
 WORDPRESS_URL = $(shell echo http://localhost/~`whoami`/`basename $(CURRENT_DIR)`)
 APACHE_PATH = ~/Sites/$(BASE)
-WORDPRESS_DIR = $(shell echo `pwd`/wordpress)
+
 
 # default when type in make
 start:
