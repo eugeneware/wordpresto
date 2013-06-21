@@ -12,7 +12,6 @@ WORDPRESS_URL = $(shell echo http://localhost/~`whoami`/`basename $(CURRENT_DIR)
 APACHE_PATH = ~/Sites/$(BASE)
 WORDPRESS_DIR = $(shell echo `pwd`/wordpress)
 
-
 # default when type in make
 start:
 	@echo Read through the Makefile for details
@@ -71,3 +70,11 @@ mysqlup:
 mysqldown:
 	@echo "Shutting down Mysql..."
 	@mysqladmin shutdown -uroot --port=$(MYSQL_PORT) --socket=$(MYSQL_SOCKET)
+
+~/.composer/bin/wp:
+	@curl -s http://wp-cli.org/installer.sh | bash
+
+plugininit: ~/.composer/bin/wp
+	@ln -sf `pwd` wordpress/wp-content/plugins/
+	@~/.composer/bin/wp --path=./wordpress plugin activate "$(BASE)"
+	@~/.composer/bin/wp --path=./wordpress plugin list
