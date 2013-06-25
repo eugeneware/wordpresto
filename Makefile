@@ -72,7 +72,7 @@ mysqlup:
 # stop mysql
 mysqldown:
 	@echo "Shutting down Mysql..."
-	@mysqladmin shutdown -uroot --port=$(MYSQL_PORT) --socket=$(MYSQL_SOCKET)
+	-@mysqladmin shutdown -uroot --port=$(MYSQL_PORT) --socket=$(MYSQL_SOCKET)
 
 ~/.composer/bin/wp:
 	@curl -s http://wp-cli.org/installer.sh | bash

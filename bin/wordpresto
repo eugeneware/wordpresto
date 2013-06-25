@@ -1,0 +1,4 @@
+#!/bin/sh
+
+HERE=`pwd -P`
+make -f $HERE/Makefile $1
