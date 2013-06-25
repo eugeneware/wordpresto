@@ -4,7 +4,7 @@
 WORDPRESS_OWNER=`whoami`
 
 INSTALL_PARENT_FOLDER=.
-INSTALL_WORDPRESS_FOLDER="wordpress"
+INSTALL_WORDPRESS_FOLDER="node_modules/wordpresto/wordpress"
 WORDPRESS_URL="$1"
 
 MYSQL_BIN=`which mysql`

@@ -2,12 +2,13 @@ MYSQL_DIR = $(shell echo `which mysqld`)
 MYSQL_BIN_BASE = $(shell echo `dirname $(MYSQL_DIR)`)
 MYSQL_BASE = $(shell echo `dirname $(MYSQL_BIN_BASE)`)
 MYSQL_PORT = 3308
-MYSQL_DATA = ./db/mysql
-MYSQL_SOCKET = /tmp/mysql.wordpress.sock
-MYSQL_SNAPSHOT = ./db/mysql.snapshot
 CURRENT_DIR = $(shell echo `pwd`)
+MODULE_DIR = $(CURRENT_DIR)/node_modules/wordpresto
+MYSQL_DATA = $(MODULE_DIR)/db/mysql
+MYSQL_SOCKET = /tmp/mysql.wordpress.sock
+MYSQL_SNAPSHOT = $(MODULE_DIR)/db/mysql.snapshot
 BASE = $(shell echo `basename $(CURRENT_DIR)`)
-WORDPRESS_DIR = $(shell echo `pwd`/wordpress)
+WORDPRESS_DIR = $(MODULE_DIR)/wordpress
 
 # You may with to customize these two variables
 WORDPRESS_URL = $(shell echo http://localhost/~`whoami`/`basename $(CURRENT_DIR)`)
@@ -26,7 +27,7 @@ clean:
 	-@mysqladmin shutdown -uroot --port=$(MYSQL_PORT) --socket=$(MYSQL_SOCKET)
 	rm -rf $(MYSQL_DATA)/*
 	rm -rf $(MYSQL_SNAPSHOT)/*
-	rm -rf ./wordpress/*
+	rm -rf $(MODULE_DIR)/wordpress/*
 
 # create a new database
 mysqlinit:
@@ -36,9 +37,9 @@ mysqlinit:
 
 # create a brand new wordpress instance
 wordpressinit: clean mysqlinit mysqlup
-	rm -rf ./wordpress/*
-	./bin/installwp.sh "$(WORDPRESS_URL)"
-	rm -rf ./wordpress/wordpress-cli-installer.sh
+	rm -rf $(MODULE_DIR)/wordpress/*
+	$(MODULE_DIR)/bin/installwp.sh "$(WORDPRESS_URL)"
+	rm -rf $(MODULE_DIR)/wordpress/wordpress-cli-installer.sh
 	@echo "Shutting down Mysql..."
 	mysqladmin shutdown -uroot --port=$(MYSQL_PORT) --socket=$(MYSQL_SOCKET)
 	cp -R $(MYSQL_DATA)/* $(MYSQL_SNAPSHOT)
@@ -78,11 +79,12 @@ mysqldown:
 	@curl -s http://wp-cli.org/installer.sh | bash
 
 plugininit: ~/.composer/bin/wp wordpressinit
-	@ln -sf `pwd` wordpress/wp-content/plugins/
-	@~/.composer/bin/wp --path=./wordpress plugin activate "$(BASE)"
-	@~/.composer/bin/wp --path=./wordpress plugin list
+	@ln -sf `pwd` $(MODULE_DIR)/wordpress/wp-content/plugins/
+	~/.composer/bin/wp --path=$(MODULE_DIR)/wordpress plugin activate "$(BASE)"
+	~/.composer/bin/wp --path=$(MODULE_DIR)/wordpress plugin list
 
 .PHONY: build
 build:
+	@mkdir -p ./build
 	@rm -rf "./build/$(BASE).zip"
-	@zip -y9r "./build/$(BASE).zip" . -x "wordpress/*" ".git/*" "db/*" ".git*" "Makefile" "bin/*" "build/*" "*.swp"
+	@zip -y9r "./build/$(BASE).zip" . -x ".git/*" "node_modules/*" "*.swp" "build/*"
