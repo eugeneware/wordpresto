@@ -1,4 +1,3 @@
 #!/bin/sh
-
-HERE=`pwd -P`
-make -f $HERE/Makefile $1
+cd  `dirname $0`/../wordpresto
+make -f Makefile $1

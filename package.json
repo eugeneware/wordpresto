@@ -1,0 +1,30 @@
+{
+  "name": "wordpresto",
+  "version": "0.0.1",
+  "description": "A testing framework for reliable, repeatable testing of wordpress plugins.",
+  "main": "index.js",
+  "bin": {
+    "wordpresto": "./bin/wordpresto"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/eugeneware/wordpresto.git"
+  },
+  "keywords": [
+    "wordpress",
+    "test",
+    "testing",
+    "install",
+    "installation",
+    "tdd",
+    "bdd"
+  ],
+  "author": "Eugene Ware <eugene@noblesamurai.com>",
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "gitHead": "80d13c90fe2e772641d250136f223e3d885a3a01",
+  "devDependencies": {}
+}
