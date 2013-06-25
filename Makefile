@@ -80,8 +80,8 @@ mysqldown:
 
 plugininit: ~/.composer/bin/wp wordpressinit
 	@ln -sf `pwd` $(MODULE_DIR)/wordpress/wp-content/plugins/
-	~/.composer/bin/wp --path=$(MODULE_DIR)/wordpress plugin activate "$(BASE)"
-	~/.composer/bin/wp --path=$(MODULE_DIR)/wordpress plugin list
+	@~/.composer/bin/wp --path=$(MODULE_DIR)/wordpress plugin activate "$(BASE)"
+	@~/.composer/bin/wp --path=$(MODULE_DIR)/wordpress plugin list
 
 .PHONY: build
 build:
