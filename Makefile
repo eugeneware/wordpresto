@@ -82,6 +82,8 @@ plugininit: ~/.composer/bin/wp wordpressinit
 	@ln -sf `pwd` $(MODULE_DIR)/wordpress/wp-content/plugins/
 	@~/.composer/bin/wp --path=$(MODULE_DIR)/wordpress plugin activate "$(BASE)"
 	@~/.composer/bin/wp --path=$(MODULE_DIR)/wordpress plugin list
+	@~/.composer/bin/wp --path=$(MODULE_DIR)/wordpress rewrite structure "/%postname%/"
+	@~/.composer/bin/wp --path=$(MODULE_DIR)/wordpress eval "global \$$is_apache; \$$is_apache = true; function apache_get_modules() { return array('mod_rewrite'); }; flush_rewrite_rules(true); "
 
 .PHONY: build
 build:
