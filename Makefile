@@ -36,10 +36,12 @@ mysqlinit:
 	mkdir -p $(MYSQL_SNAPSHOT)
 
 # create a brand new wordpress instance
-wordpressinit: clean mysqlinit mysqlup
+wordpressinit: clean mysqlinit mysqlup ~/.composer/bin/wp
 	rm -rf $(MODULE_DIR)/wordpress/*
 	$(MODULE_DIR)/bin/installwp.sh "$(WORDPRESS_URL)"
 	rm -rf $(MODULE_DIR)/wordpress/wordpress-cli-installer.sh
+	@~/.composer/bin/wp --path=$(MODULE_DIR)/wordpress rewrite structure "/%postname%/"
+	@~/.composer/bin/wp --path=$(MODULE_DIR)/wordpress eval "global \$$is_apache; \$$is_apache = true; function apache_get_modules() { return array('mod_rewrite'); }; flush_rewrite_rules(true); "
 	@echo "Shutting down Mysql..."
 	mysqladmin shutdown -uroot --port=$(MYSQL_PORT) --socket=$(MYSQL_SOCKET)
 	cp -R $(MYSQL_DATA)/* $(MYSQL_SNAPSHOT)
@@ -78,12 +80,10 @@ mysqldown:
 ~/.composer/bin/wp:
 	@curl -s http://wp-cli.org/installer.sh | bash
 
-plugininit: ~/.composer/bin/wp wordpressinit
+plugininit: wordpressinit
 	@ln -sf `pwd` $(MODULE_DIR)/wordpress/wp-content/plugins/
 	@~/.composer/bin/wp --path=$(MODULE_DIR)/wordpress plugin activate "$(BASE)"
 	@~/.composer/bin/wp --path=$(MODULE_DIR)/wordpress plugin list
-	@~/.composer/bin/wp --path=$(MODULE_DIR)/wordpress rewrite structure "/%postname%/"
-	@~/.composer/bin/wp --path=$(MODULE_DIR)/wordpress eval "global \$$is_apache; \$$is_apache = true; function apache_get_modules() { return array('mod_rewrite'); }; flush_rewrite_rules(true); "
 
 .PHONY: build
 build:
